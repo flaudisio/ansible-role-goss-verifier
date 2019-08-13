@@ -12,7 +12,7 @@ This is a non-exhaustive list of the role variables. Please see the file [`defau
 for more details.
 
 ```yaml
-# TODO.
+goss_version: v0.3.6
 ```
 
 ## Dependencies
@@ -22,7 +22,12 @@ None.
 ## Example Playbook
 
 ```yaml
-# TODO.
+---
+- hosts: all
+  roles:
+    - role: goss
+      vars:
+        goss_version: v0.3.6
 ```
 
 ## License
