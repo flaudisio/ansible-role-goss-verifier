@@ -71,7 +71,7 @@
 
 - name: Run Goss tests
   command: >
-    {{ goss_bin }} -g "{{ item.path }}" validate --format {{ goss_format }}
+    {{ goss_path }} -g "{{ item.path }}" validate --format {{ goss_format }}
   loop: "{{ goss_test_files.files | sort(attribute='path') }}"
   environment: "{{ molecule_yml.verifier.env | default({}) }}"
   register: goss_tests
