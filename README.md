@@ -1,6 +1,8 @@
-# Ansible Role: Goss
+# Ansible Role: Goss Verifier
 
-Ansible role for Goss installation.
+Ansible role to install and run Goss as a [Molecule verifier][molecule-verifier].
+
+[molecule-verifier]: https://molecule.readthedocs.io/en/stable/configuration.html#goss
 
 ## Requirements
 
@@ -22,12 +24,16 @@ None.
 ## Example Playbook
 
 ```yaml
+# <role_dir>/molecule/default/verify.yml
 ---
-- hosts: all
+- name: Verify
+  hosts: all
+  become: true
+
   roles:
     - role: goss
       vars:
-        goss_version: v0.3.6
+        goss_version: v0.3.6 # Optional!
 ```
 
 ## License
