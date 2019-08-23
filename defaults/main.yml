@@ -8,7 +8,7 @@ goss_path: /usr/local/bin/goss
 
 goss_test_directory: /tmp/molecule/goss
 
-goss_format: documentation
+goss_format: tap
 
 # dgoss
 
