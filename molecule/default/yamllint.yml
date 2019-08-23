@@ -1,0 +1,17 @@
+---
+extends: default
+
+ignore: |
+  .pre-commit-config.yaml
+
+rules:
+  braces:
+    max-spaces-inside: 1
+    level: error
+  brackets:
+    max-spaces-inside: 1
+    level: error
+  line-length:
+    max: 160
+    level: warning
+  new-line-at-end-of-file: enable
