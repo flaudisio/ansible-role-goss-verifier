@@ -8,7 +8,7 @@
   get_url:
     url: "{{ goss_dl_url }}"
     dest: "{{ goss_path }}"
-    force: yes
+    force: true
     owner: root
     group: root
     mode: 0755
@@ -20,7 +20,7 @@
   get_url:
     url: "{{ goss_dgoss_dl_url }}"
     dest: "{{ goss_dgoss_path }}"
-    force: yes
+    force: true
     owner: root
     group: root
     mode: 0755
@@ -69,7 +69,7 @@
       - "*.yml"
   register: goss_test_files
 
-- name: Run Goss tests
+- name: Run Goss tests  # noqa 301
   command: >
     {{ goss_path }} -g "{{ item.path }}" validate --format {{ goss_format }}
   loop: "{{ goss_test_files.files | sort(attribute='path') }}"
