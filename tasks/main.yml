@@ -28,3 +28,59 @@
     goss_check.stdout_lines | length == 0
     or goss_version not in goss_check.stdout_lines[0]
   tags: goss:dgoss
+
+- name: Create directory for test files
+  file:
+    path: "{{ goss_test_directory }}"
+    state: directory
+
+- name: Find Goss tests on localhost
+  find:
+    paths: "{{ lookup('env', 'MOLECULE_VERIFIER_TEST_DIRECTORY') }}"
+    patterns:
+      - "test[-.\\w]*.yml"
+      - "test_host_{{ ansible_hostname }}[-.\\w]*.yml"
+    excludes:
+      - "test_host_(?!{{ ansible_hostname }})[-.\\w]*.yml"
+    use_regex: true
+  delegate_to: localhost
+  register: goss_found_tests
+  changed_when: false
+  become: false
+
+- name: Debug information about test files found
+  debug:
+    msg: "{{ goss_found_tests.files }}"
+    verbosity: 3
+
+- name: Copy Goss test files
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ goss_test_directory }}/{{ item.path | basename }}"
+  loop: "{{ goss_found_tests.files }}"
+
+- name: Register test files
+  find:
+    path: "{{ goss_test_directory }}"
+    patterns:
+      - "*.yml"
+  register: goss_test_files
+
+- name: Run Goss tests
+  command: >
+    {{ goss_bin }} -g "{{ item.path }}" validate --format {{ goss_format }}
+  loop: "{{ goss_test_files.files | sort(attribute='path') }}"
+  environment: "{{ molecule_yml.verifier.env | default({}) }}"
+  register: goss_tests
+  failed_when: false
+
+- name: Display details about the test results
+  debug:
+    msg: "{{ item.stdout_lines }}"
+  loop: "{{ goss_tests.results }}"
+
+- name: Fail if some Goss test failed
+  fail:
+    msg: "Goss failed to validate: {{ item.item }}"
+  when: item.rc != 0
+  loop: "{{ goss_tests.results }}"

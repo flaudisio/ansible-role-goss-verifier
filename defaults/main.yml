@@ -6,6 +6,10 @@ goss_dl_url: >
 
 goss_path: /usr/local/bin/goss
 
+goss_test_directory: /tmp/molecule/goss
+
+goss_format: documentation
+
 # dgoss
 
 goss_dgoss_dl_url: >
